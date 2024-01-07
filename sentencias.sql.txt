@@ -1,0 +1,74 @@
+CREATE TABLE Gimnasio(
+nombre varchar (50),
+CONSTRAINT pk_Gimnasio PRIMARY KEY (nombre)
+);
+
+CREATE TABLE Persona(
+dni varchar (9),
+nombre varchar (50),
+primer_Apellido varchar (50),
+CONSTRAINT pk_Persona PRIMARY KEY (dni)
+);
+CREATE TABLE Entrenador(
+salario float (7),
+dniPersona varchar (9),
+nombreGimnasio varchar (50),
+CONSTRAINT fk_Entrenador_Persona FOREIGN KEY (dniPersona) REFERENCES Persona (dni),
+CONSTRAINT fk_Entrenador_Gimnasio FOREIGN KEY (nombreGimnasio) REFERENCES Gimnasio (nombre)
+);
+
+CREATE TABLE Cliente(
+fecha_de_alta date,
+dniPersona varchar (9),
+CONSTRAINT fk_Cliente_Persona FOREIGN KEY (dniPersona) REFERENCES Persona (dni)
+);
+
+CREATE TABLE Planificacion(
+codigo int (20),
+fechaCreacion date,
+CONSTRAINT pk_Planificacion PRIMARY KEY (codigo)
+);
+
+CREATE TABLE Entrenador_Cliente_Planificacion(
+dniPersonaEntrenador varchar (9),
+dniPersonaCliente varchar (9),
+codigoPlanificacion int (20),
+CONSTRAINT fk_Entrenador_Cliente_Planificacion_Entrenador FOREIGN KEY (dniPersonaEntrenador) REFERENCES Entrenador (dniPersona),
+CONSTRAINT fk_Entrenador_Cliente_Planificacion_Cliente FOREIGN KEY (dniPersonaCliente) REFERENCES Cliente (dniPersona),
+CONSTRAINT fk_Entrenador_Cliente_Planificacion_Planificacion FOREIGN KEY (codigoPlanificacion) REFERENCES Planificacion (codigo)
+);
+
+CREATE TABLE Entrenamiento(
+codigo int (20),
+fechaCreacion date,
+codigoPlanificacion int (20),
+CONSTRAINT pk_Entrenamiento PRIMARY KEY (codigo),
+CONSTRAINT fk_Entrenamiento_Planificacion FOREIGN KEY (codigoPlanificacion) REFERENCES Planificacion (codigo)
+);
+
+CREATE TABLE Ejercicio(
+nombre varchar (50),
+numeroSeries int (20),
+numeroRepeticiones int (20),
+CONSTRAINT pk_Ejercicio PRIMARY KEY (nombre)
+);
+
+CREATE TABLE Entrenamiento_Ejercicio(
+codigoEntrenamiento int (20),
+nombreEjercicio varchar (50),
+CONSTRAINT fk_Entrenamiento_Ejercicio_Entrenamiento FOREIGN KEY (codigoEntrenamiento) REFERENCES Entrenamiento (codigo),
+CONSTRAINT fk_Entrenamiento_Ejercicio_Ejercicio FOREIGN KEY (nombreEjercicio) REFERENCES Ejercicio (nombre)
+);
+
+CREATE TABLE Material(
+nombre varchar (50),
+CONSTRAINT pk_Material PRIMARY KEY (nombre)
+);
+
+CREATE TABLE Ejercicio_Material(
+nombreEjercicio varchar (50),
+nombreMaterial varchar (50),
+CONSTRAINT fk_Ejercicio_Material_Ejercicio FOREIGN KEY (nombreEjercicio) REFERENCES Ejercicio (nombre),
+CONSTRAINT fk_Ejercicio_Material_Material FOREIGN KEY (nombreMaterial) REFERENCES Material (nombre)
+);
+
